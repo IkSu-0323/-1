@@ -264,7 +264,7 @@
 
 <body>
 <header>
-  <h1>📍 魔靈標示輔助器（多地圖 / 點位 4 狀態 / 可新增刪除 / 一鍵重置）</h1>
+  <h1>📍 魔靈標示輔助器</h1>
 
   <div class="row">
     <span class="badge">模式：<b id="modeLabel">一般</b></span>
@@ -375,12 +375,12 @@ const STORAGE_KEY = "mapTaskTool_v4";
 function createDefaultData() {
   return {
     maps: [
-      { id: uid(), name: "地圖 1", src: "maps/map1.png" },
-      { id: uid(), name: "地圖 2", src: "maps/map2.png" },
-      { id: uid(), name: "地圖 3", src: "maps/map3.png" },
-      { id: uid(), name: "地圖 4", src: "maps/map4.png" },
-      { id: uid(), name: "地圖 5", src: "maps/map5.png" },
-      { id: uid(), name: "地圖 6", src: "maps/map6.png" },
+      { id: uid(), name: "淨界島", src: "maps/map1.png" },
+      { id: uid(), name: "冰湖城東區", src: "maps/map2.png" },
+      { id: uid(), name: "冰湖城下水道", src: "maps/map3.png" },
+      { id: uid(), name: "格雷姆廢礦", src: "maps/map4.png" },
+      { id: uid(), name: "龍莎要塞-區域1", src: "maps/map5.png" },
+      { id: uid(), name: "龍莎要塞-區域2", src: "maps/map6.png" },
     ],
     markers: [],
     currentMapId: null
@@ -762,7 +762,7 @@ function renderLegendAndStats() {
 
   const failBlock = failedMaps
     ? `<div class="fail-title">提醒</div>${failedMaps}`
-    : `<div class="fail-title">提醒</div><div class="fail-empty">目前沒有捕捉失敗的地圖（state3 = 0）。</div>`;
+    : `<div class="fail-title">提醒</div><div class="fail-empty">目前沒有魔靈捕捉失敗。</div>`;
 
   legendEl.innerHTML = `
     <div class="legend-title">點位狀態</div>

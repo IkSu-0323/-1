@@ -402,6 +402,69 @@
     color: rgba(255,255,255,.9);
     font-size:13px;
   }
+  /* ===== 魔靈刷新規則 Dialog ===== */
+.rule-btn{
+  margin-top:10px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.16);
+  color: rgba(255,255,255,.92);
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.rule-btn:hover{ background: rgba(255,255,255,.06); }
+
+.rule-dialog{
+  width: min(760px, 92vw);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 16px;
+  padding: 0;
+  background: #181818;
+  color: #fff;
+  box-shadow: 0 18px 60px rgba(0,0,0,.55);
+}
+.rule-dialog::backdrop{
+  background: rgba(0,0,0,.55);
+}
+
+.rule-head{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+.rule-title{ font-weight: 750; }
+.rule-close{
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.rule-body{
+  padding: 12px;
+  max-height: min(72vh, 640px);
+  overflow: auto;
+  display: grid;
+  gap: 10px;
+}
+.rule-card{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  border-radius: 14px;
+  padding: 12px;
+}
+.rule-card h3{
+  margin: 0 0 6px 0;
+  font-size: 14px;
+}
+.rule-card p, .rule-card li{
+  margin: 6px 0;
+  color: rgba(255,255,255,.78);
+}
+
 </style>
 </head>
 
@@ -474,15 +537,15 @@
       達捕捉上限後，同地圖其餘點位可略過。
     </div>
 
-    <details class="hint-details">
-      <summary>魔靈刷新規則（點開查看）</summary>
-
+     <button id="btnOpenRules" type="button" class="rule-btn">
+     📘 魔靈刷新規則（點開查看）
+     </button>
+	 
       <div class="hint-block">
         <div class="hint-subtitle">刷新順序</div>
         <div class="hint-text">
           3 → 6 → 2 → 5 → 1 → 4 → 7（循環）<br>
           ※ 此循環指的是禮拜三、六、二、五、一、四、日<br>
-          ※ 刷新「起點」依你的上線日推定：若週二上線，下一次刷新從週五接續。
         </div>
       </div>
 
@@ -505,6 +568,36 @@
       </div>
     </details>
   </div>
+  <dialog id="ruleDialog" class="rule-dialog">
+  <div class="rule-head">
+    <div class="rule-title">📘 魔靈刷新規則</div>
+    <button type="button" class="rule-close" id="btnCloseRules">✕</button>
+  </div>
+
+  <div class="rule-body">
+    <section class="rule-card">
+      <h3>刷新順序</h3>
+      <p>3 → 6 → 2 → 5 → 1 → 4 → 7（循環）</p>
+      <p>※ 禮拜三、六、二、五、一、四、日</p>
+      <p>※ 起點依你的上線日推定：若週二上線，下次從週五。</p>
+    </section>
+
+    <section class="rule-card">
+      <h3>72 小時重置</h3>
+      <p>無論成功或失敗，皆以「刷新後 +72 小時」重置；重置後可能出現在其他點位。</p>
+    </section>
+
+    <section class="rule-card">
+      <h3>魔靈出現規則（對照）</h3>
+      <ul>
+        <li>第 1 天：成功 → 第 2/3 天不顯示；失敗 → 持續顯示</li>
+        <li>第 2 天：成功 → 第 3 天不顯示；失敗 → 顯示</li>
+        <li>第 3 天：成功 / 失敗 → 過點等待刷新</li>
+      </ul>
+    </section>
+  </div>
+</dialog>
+
 </header>
 
 <main>
@@ -1304,6 +1397,32 @@ function formatBytes(bytes){
     if (e.key === "Escape") closeAll(null);
   });
 })();
+/* ===== 魔靈刷新規則 Dialog ===== */
+(() => {
+  const btnOpen = document.getElementById("btnOpenRules");
+  const dlg = document.getElementById("ruleDialog");
+  const btnClose = document.getElementById("btnCloseRules");
+
+  if (!btnOpen || !dlg) return;
+
+  btnOpen.addEventListener("click", () => dlg.showModal());
+  btnClose.addEventListener("click", () => dlg.close());
+
+  // 點擊 dialog 外圍關閉
+  dlg.addEventListener("click", (e) => {
+    const r = dlg.getBoundingClientRect();
+    const inside =
+      e.clientX >= r.left && e.clientX <= r.right &&
+      e.clientY >= r.top  && e.clientY <= r.bottom;
+    if (!inside) dlg.close();
+  });
+
+  // ESC 關閉
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && dlg.open) dlg.close();
+  });
+})();
+
 </script>
 </body>
 </html>
